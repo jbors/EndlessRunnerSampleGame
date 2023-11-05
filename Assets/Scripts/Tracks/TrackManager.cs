@@ -28,6 +28,9 @@ using UnityEngine.Analytics;
 /// 
 /// - End is called and everything is cleared and destroyed, and we go back to the Loadout State.
 /// </summary>
+///
+
+// TODO: what do we need to change here so a training run starts automatically??
 public class TrackManager : MonoBehaviour
 {
     static public TrackManager instance { get { return s_Instance; } }

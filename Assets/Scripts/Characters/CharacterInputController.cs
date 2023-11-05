@@ -80,7 +80,7 @@ public class CharacterInputController: Agent
     protected const float k_TrackSpeedToJumpAnimSpeedRatio = 0.6f;
     protected const float k_TrackSpeedToSlideAnimSpeedRatio = 0.9f;
 
-    protected void Awake ()
+    public override void Initialize()
     {
         m_Premium = 0;
         m_CurrentLife = 0;
@@ -204,6 +204,12 @@ public class CharacterInputController: Agent
         }
     }
 
+    //TODO: what else to start training??
+    public override void OnEpisodeBegin()
+    {
+        trackManager.Begin();
+
+    }
 
     //Execute chosen action
     public override void OnActionReceived(ActionBuffers actions)
