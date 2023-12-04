@@ -36,6 +36,8 @@ public class TrackManager : MonoBehaviour
     static public TrackManager instance { get { return s_Instance; } }
     static protected TrackManager s_Instance;
 
+    public GameState gameState;
+
     static int s_StartHash = Animator.StringToHash("Start");
 
     public delegate int MultiplierModifier(int current);
@@ -173,6 +175,14 @@ public class TrackManager : MonoBehaviour
 
         characterController.StartRunning();
         StartMove();
+    }
+
+    public void Reset()
+    {
+        //gameManager.popState();
+        gameState.StartGame();
+
+
     }
 
     public IEnumerator Begin()

@@ -110,6 +110,7 @@ public class CharacterCollider : MonoBehaviour
     {
         if (c.gameObject.layer == k_CoinsLayerIndex)
 		{
+			controller.AddReward(0.05f);
 			if (magnetCoins.Contains(c.gameObject))
 				magnetCoins.Remove(c.gameObject);
 
@@ -154,6 +155,7 @@ public class CharacterCollider : MonoBehaviour
             }
             else
             {
+                controller.AddReward(-0.5f);
                 controller.currentLife -= 1;
             }
 

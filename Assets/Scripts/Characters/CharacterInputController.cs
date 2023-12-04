@@ -18,7 +18,7 @@ public class CharacterInputController: Agent
 	static int s_JumpingSpeedHash = Animator.StringToHash("JumpSpeed");
 	static int s_SlidingHash = Animator.StringToHash("Sliding");
 
-	public TrackManager trackManager;
+    public TrackManager trackManager;
 	public Character character;
 	public CharacterCollider characterCollider;
 	public GameObject blobShadow;
@@ -207,15 +207,19 @@ public class CharacterInputController: Agent
     //TODO: what else to start training??
     public override void OnEpisodeBegin()
     {
-        trackManager.Begin();
+        Debug.Log("Starting new episode");
+        trackManager.Reset();
+
+
 
     }
+
 
     //Execute chosen action
     public override void OnActionReceived(ActionBuffers actions)
     {
 
-        Debug.Log("Actions received" + Newtonsoft.Json.JsonConvert.SerializeObject(actions));
+        //Debug.Log("Actions received" + Newtonsoft.Json.JsonConvert.SerializeObject(actions));
 
         var Actions = actions.DiscreteActions;
 

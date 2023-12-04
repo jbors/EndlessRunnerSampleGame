@@ -104,6 +104,8 @@ public class GameState : AState
         m_AdsInitialised = false;
         m_GameoverSelectionDone = false;
 
+        trackManager.gameState = this;
+
         StartGame();
     }
 
@@ -284,10 +286,10 @@ public class GameState : AState
 		if (pauseStatus) Pause();
 	}
 
-    void OnApplicationFocus(bool focusStatus)
-    {
-        if (!focusStatus) Pause();
-    }
+    //void OnApplicationFocus(bool focusStatus)
+    //{
+    //    if (!focusStatus) Pause();
+    //}
 
     public void Pause(bool displayMenu = true)
 	{
@@ -418,6 +420,7 @@ public class GameState : AState
 
     public void GameOver()
     {
+        //Perhaps just restart immediately??
         manager.SwitchState("GameOver");
     }
 
