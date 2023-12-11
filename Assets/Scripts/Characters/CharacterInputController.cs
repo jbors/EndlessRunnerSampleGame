@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
 
 /// <summary>
 /// Handle everything related to controlling the character. Interact with both the Character (visual, animation) and CharacterCollider
@@ -204,6 +205,15 @@ public class CharacterInputController: Agent
         }
     }
 
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(m_CurrentLane);
+
+        //Are these useful?
+        sensor.AddObservation(m_Sliding);
+        sensor.AddObservation(m_Jumping);
+    }
+
     //TODO: what else to start training??
     public override void OnEpisodeBegin()
     {
@@ -301,7 +311,7 @@ public class CharacterInputController: Agent
         }
 
         //Add tiny reward every iteration we do not die
-        AddReward(0.005f);
+        AddReward(0.001f);
 	}
 
     public void Jump()

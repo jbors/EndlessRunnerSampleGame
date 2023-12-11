@@ -337,7 +337,7 @@ public class TrackManager : MonoBehaviour
 
         while (_spawnedSegments < (m_IsTutorial ? 4 : k_DesiredSegmentCount))
         {
-            Debug.Log("Spawning new segment " + m_Segments.Count + " " + _spawnedSegments);
+            //Debug.Log("Spawning new segment " + m_Segments.Count + " " + _spawnedSegments);
             StartCoroutine(SpawnNewSegment());
             _spawnedSegments++;
         }
@@ -382,7 +382,7 @@ public class TrackManager : MonoBehaviour
         m_TotalWorldDistance += scaledSpeed;
         m_CurrentSegmentDistance += scaledSpeed;
 
-        if (m_CurrentSegmentDistance > m_Segments[0].worldLength)
+        if (m_Segments.Count > 0 && m_CurrentSegmentDistance > m_Segments[0].worldLength)
         {
             m_CurrentSegmentDistance -= m_Segments[0].worldLength;
 
