@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
 
 /// <summary>
 /// Handle everything related to controlling the character. Interact with both the Character (visual, animation) and CharacterCollider
 /// </summary>
-public class CharacterInputController : MonoBehaviour
+
+// This is turned into an agent
+public class CharacterInputController: Agent
 {
     static int s_DeadHash = Animator.StringToHash ("Dead");
 	static int s_RunStartHash = Animator.StringToHash("runStart");
@@ -14,7 +19,7 @@ public class CharacterInputController : MonoBehaviour
 	static int s_JumpingSpeedHash = Animator.StringToHash("JumpSpeed");
 	static int s_SlidingHash = Animator.StringToHash("Sliding");
 
-	public TrackManager trackManager;
+    public TrackManager trackManager;
 	public Character character;
 	public CharacterCollider characterCollider;
 	public GameObject blobShadow;
@@ -76,7 +81,7 @@ public class CharacterInputController : MonoBehaviour
     protected const float k_TrackSpeedToJumpAnimSpeedRatio = 0.6f;
     protected const float k_TrackSpeedToSlideAnimSpeedRatio = 0.9f;
 
-    protected void Awake ()
+    public override void Initialize()
     {
         m_Premium = 0;
         m_CurrentLife = 0;
@@ -175,83 +180,68 @@ public class CharacterInputController : MonoBehaviour
         return (!TrackManager.instance.isTutorial || currentTutorialLevel >= tutorialLevel);
     }
 
-	protected void Update ()
+    // Record player action
+    public override void Heuristic(in ActionBuffers actionsOut)
     {
-#if UNITY_EDITOR || UNITY_STANDALONE
-        // Use key input in editor or standalone
-        // disabled if it's tutorial and not thecurrent right tutorial level (see func TutorialMoveCheck)
+        var Actions = actionsOut.DiscreteActions;
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && TutorialMoveCheck(0))
+        Actions[0] = 0;
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            Actions[0] = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            Actions[0] = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Actions[0] = 3;
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            Actions[0] = 4;
+        }
+    }
+
+    public override void CollectObservations(VectorSensor sensor)
+    {        
+    }
+
+    //Reset environment for a new run
+    public override void OnEpisodeBegin()
+    {
+        Debug.Log("Starting new episode");
+        trackManager.Reset();
+    }
+
+
+    //Execute chosen action
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+
+        //Debug.Log("Actions received" + Newtonsoft.Json.JsonConvert.SerializeObject(actions));
+
+        var Actions = actions.DiscreteActions;
+
+        if (Mathf.FloorToInt(Actions[0]) == 1 && TutorialMoveCheck(0))
         {
             ChangeLane(-1);
         }
-        else if(Input.GetKeyDown(KeyCode.RightArrow) && TutorialMoveCheck(0))
+        else if(Mathf.FloorToInt(Actions[0]) == 2 && TutorialMoveCheck(0))
         {
             ChangeLane(1);
         }
-        else if(Input.GetKeyDown(KeyCode.UpArrow) && TutorialMoveCheck(1))
+        else if(Mathf.FloorToInt(Actions[0]) == 3 && TutorialMoveCheck(1))
         {
             Jump();
         }
-		else if (Input.GetKeyDown(KeyCode.DownArrow) && TutorialMoveCheck(2))
+		else if (Mathf.FloorToInt(Actions[0]) == 4 && TutorialMoveCheck(2))
 		{
 			if(!m_Sliding)
 				Slide();
 		}
-#else
-        // Use touch input on mobile
-        if (Input.touchCount == 1)
-        {
-			if(m_IsSwiping)
-			{
-				Vector2 diff = Input.GetTouch(0).position - m_StartingTouch;
-
-				// Put difference in Screen ratio, but using only width, so the ratio is the same on both
-                // axes (otherwise we would have to swipe more vertically...)
-				diff = new Vector2(diff.x/Screen.width, diff.y/Screen.width);
-
-				if(diff.magnitude > 0.01f) //we set the swip distance to trigger movement to 1% of the screen width
-				{
-					if(Mathf.Abs(diff.y) > Mathf.Abs(diff.x))
-					{
-						if(TutorialMoveCheck(2) && diff.y < 0)
-						{
-							Slide();
-						}
-						else if(TutorialMoveCheck(1))
-						{
-							Jump();
-						}
-					}
-					else if(TutorialMoveCheck(0))
-					{
-						if(diff.x < 0)
-						{
-							ChangeLane(-1);
-						}
-						else
-						{
-							ChangeLane(1);
-						}
-					}
-						
-					m_IsSwiping = false;
-				}
-            }
-
-        	// Input check is AFTER the swip test, that way if TouchPhase.Ended happen a single frame after the Began Phase
-			// a swipe can still be registered (otherwise, m_IsSwiping will be set to false and the test wouldn't happen for that began-Ended pair)
-			if(Input.GetTouch(0).phase == TouchPhase.Began)
-			{
-				m_StartingTouch = Input.GetTouch(0).position;
-				m_IsSwiping = true;
-			}
-			else if(Input.GetTouch(0).phase == TouchPhase.Ended)
-			{
-				m_IsSwiping = false;
-			}
-        }
-#endif
 
         Vector3 verticalTargetPosition = m_TargetPosition;
 

@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - test
+  - ObstacleHighBarrier
+  - ObstacleLowBarrier
+  - ObstacleRoadworksCone
+  - ObstacleWheelyBin
+  - ObstacleRat
+  - ObstacleBin
+  - ObstacleRoadworksBarrier
   layers:
   - Default
   - TransparentFX

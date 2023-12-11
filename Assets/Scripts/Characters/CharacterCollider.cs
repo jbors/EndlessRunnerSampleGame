@@ -7,6 +7,9 @@ using UnityEngine.AddressableAssets;
 /// Handles everything related to the collider of the character. This is actually an empty game object, NOT on the character prefab
 /// as for gameplay reason, we need a single size collider for every character. (Found on the Main scene PlayerPivot/CharacterSlot gameobject)
 /// </summary>
+/// 
+
+/// This is where the scores should be assigned
 [RequireComponent(typeof(AudioSource))]
 public class CharacterCollider : MonoBehaviour
 {
@@ -124,8 +127,11 @@ public class CharacterCollider : MonoBehaviour
         }
         else if(c.gameObject.layer == k_ObstacleLayerIndex)
         {
+
             if (m_Invincible || controller.IsCheatInvincible())
                 return;
+
+			Debug.Log("Tag:" + c.gameObject.tag);
 
             controller.StopMoving();
 
@@ -161,7 +167,9 @@ public class CharacterCollider : MonoBehaviour
             // The collision killed the player, record all data to analytics.
 			else
 			{
-				m_Audio.PlayOneShot(controller.character.deathSound);
+                controller.EndEpisode();
+
+                m_Audio.PlayOneShot(controller.character.deathSound);
 
 				m_DeathData.character = controller.character.characterName;
 				m_DeathData.themeUsed = controller.trackManager.currentTheme.themeName;
@@ -173,6 +181,8 @@ public class CharacterCollider : MonoBehaviour
 
 			}
         }
+
+		
         else if(c.gameObject.layer == k_PowerupLayerIndex)
         {
             Consumable consumable = c.GetComponent<Consumable>();

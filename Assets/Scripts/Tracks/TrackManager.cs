@@ -28,10 +28,14 @@ using UnityEngine.Analytics;
 /// 
 /// - End is called and everything is cleared and destroyed, and we go back to the Loadout State.
 /// </summary>
+///
+
 public class TrackManager : MonoBehaviour
 {
     static public TrackManager instance { get { return s_Instance; } }
     static protected TrackManager s_Instance;
+
+    public GameState gameState;
 
     static int s_StartHash = Animator.StringToHash("Start");
 
@@ -125,7 +129,8 @@ public class TrackManager : MonoBehaviour
     protected const float k_StartingSegmentDistance = 2f;
     protected const int k_StartingSafeSegments = 2;
     protected const int k_StartingCoinPoolSize = 256;
-    protected const int k_DesiredSegmentCount = 10;
+    //Bump desired segment count cause for some weird reason we can run out while training
+    protected const int k_DesiredSegmentCount = 20;
     protected const float k_SegmentRemovalDistance = -30f;
     protected const float k_Acceleration = 0.2f;
     
@@ -151,8 +156,9 @@ public class TrackManager : MonoBehaviour
     IEnumerator WaitToStart()
     {
         characterController.character.animator.Play(s_StartHash);
-        float length = k_CountdownToStartLength;
-        m_TimeToStart = length;
+        //float length = k_CountdownToStartLength;
+        //m_TimeToStart = length;
+        m_TimeToStart = 0;
 
         while (m_TimeToStart >= 0)
         {
@@ -170,6 +176,17 @@ public class TrackManager : MonoBehaviour
 
         characterController.StartRunning();
         StartMove();
+    }
+
+    public void Reset()
+    {
+        End();
+        _spawnedSegments = 0;
+
+        m_CurrentSegmentDistance = k_StartingSegmentDistance;
+        m_TotalWorldDistance = 0.0f;
+
+        gameState.StartGame();
     }
 
     public IEnumerator Begin()
@@ -302,8 +319,10 @@ public class TrackManager : MonoBehaviour
     private int _spawnedSegments = 0;
     void Update()
     {
+
         while (_spawnedSegments < (m_IsTutorial ? 4 : k_DesiredSegmentCount))
         {
+            //Debug.Log("Spawning new segment " + m_Segments.Count + " " + _spawnedSegments);
             StartCoroutine(SpawnNewSegment());
             _spawnedSegments++;
         }
@@ -348,14 +367,16 @@ public class TrackManager : MonoBehaviour
         m_TotalWorldDistance += scaledSpeed;
         m_CurrentSegmentDistance += scaledSpeed;
 
-        if (m_CurrentSegmentDistance > m_Segments[0].worldLength)
+        if (m_Segments.Count > 0 && m_CurrentSegmentDistance > m_Segments[0].worldLength)
         {
             m_CurrentSegmentDistance -= m_Segments[0].worldLength;
 
             // m_PastSegments are segment we already passed, we keep them to move them and destroy them later 
             // but they aren't part of the game anymore 
             m_PastSegments.Add(m_Segments[0]);
+
             m_Segments.RemoveAt(0);
+
             _spawnedSegments--;
 
             if (currentSegementChanged != null) currentSegementChanged.Invoke(m_Segments[0]);
@@ -433,13 +454,14 @@ public class TrackManager : MonoBehaviour
 
         PowerupSpawnUpdate();
 
-        if (!m_IsTutorial)
-        {
-            if (m_Speed < maxSpeed)
-                m_Speed += k_Acceleration * Time.deltaTime;
-            else
-                m_Speed = maxSpeed;
-        }
+        //Do not speed up
+        //if (!m_IsTutorial)
+        //{
+        //    if (m_Speed < maxSpeed)
+        //        m_Speed += k_Acceleration * Time.deltaTime;
+        //    else
+        //        m_Speed = maxSpeed;
+        //}
 
         m_Multiplier = 1 + Mathf.FloorToInt((m_Speed - minSpeed) / (maxSpeed - minSpeed) * speedStep);
 
@@ -569,6 +591,8 @@ public class TrackManager : MonoBehaviour
         {
             Obstacle obstacle = obj.GetComponent<Obstacle>();
             if (obstacle != null)
+                //This where we should add the tag??
+                obstacle.tag = obstacle.name;
                 yield return obstacle.Spawn(segment, segment.obstaclePositions[posIndex]);
         }
     }
