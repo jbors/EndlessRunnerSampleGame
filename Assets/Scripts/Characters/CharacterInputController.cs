@@ -8,7 +8,7 @@ using Unity.MLAgents;
 /// Handle everything related to controlling the character. Interact with both the Character (visual, animation) and CharacterCollider
 /// </summary>
 
-//TODO: This is probably what we want to turn into an agent??
+// This is turned into an agent
 public class CharacterInputController: Agent
 {
     static int s_DeadHash = Animator.StringToHash ("Dead");
@@ -299,6 +299,9 @@ public class CharacterInputController: Agent
             shadowPosition.y = k_ShadowGroundOffset;
             blobShadow.transform.position = shadowPosition;
         }
+
+        //Add tiny reward every iteration we do not die
+        AddReward(0.005f);
 	}
 
     public void Jump()

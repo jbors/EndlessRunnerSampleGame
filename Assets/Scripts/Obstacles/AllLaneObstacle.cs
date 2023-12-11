@@ -21,6 +21,8 @@ public class AllLaneObstacle: Obstacle
         GameObject obj = op.Result as GameObject;
         obj.transform.SetParent(segment.objectRoot, true);
 
+		//obj.tag = "AllLane";
+
         //TODO : remove that hack related to #issue7
         Vector3 oldPos = obj.transform.position;
         obj.transform.position += Vector3.back;

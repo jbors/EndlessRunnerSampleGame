@@ -110,7 +110,8 @@ public class CharacterCollider : MonoBehaviour
     {
         if (c.gameObject.layer == k_CoinsLayerIndex)
 		{
-			controller.AddReward(0.05f);
+			//Experiment: no reward just avoid obstacles
+			//controller.AddReward(0.05f);
 			if (magnetCoins.Contains(c.gameObject))
 				magnetCoins.Remove(c.gameObject);
 
@@ -131,6 +132,9 @@ public class CharacterCollider : MonoBehaviour
         }
         else if(c.gameObject.layer == k_ObstacleLayerIndex)
         {
+            Debug.Log("Tag:" + c.gameObject.tag);
+            controller.AddReward(-1.0f);
+
             if (m_Invincible || controller.IsCheatInvincible())
                 return;
 
@@ -155,7 +159,6 @@ public class CharacterCollider : MonoBehaviour
             }
             else
             {
-                controller.AddReward(-0.5f);
                 controller.currentLife -= 1;
             }
 
@@ -170,7 +173,7 @@ public class CharacterCollider : MonoBehaviour
 			else
 			{
 				// Send event back to the Agent for scoring/training
-                controller.AddReward(-1.0f);
+                //controller.AddReward(-1.0f);
                 controller.EndEpisode();
 
                 m_Audio.PlayOneShot(controller.character.deathSound);
@@ -185,6 +188,8 @@ public class CharacterCollider : MonoBehaviour
 
 			}
         }
+
+		
         else if(c.gameObject.layer == k_PowerupLayerIndex)
         {
             Consumable consumable = c.GetComponent<Consumable>();

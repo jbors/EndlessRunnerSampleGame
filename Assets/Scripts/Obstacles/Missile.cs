@@ -54,6 +54,9 @@ public class Missile : Obstacle
 	    Missile missile = obj.GetComponent<Missile>();
 	    missile.m_OwnSegement = segment;
 
+        //obj.tag = "Missile";
+
+
         //TODO : remove that hack related to #issue7
         Vector3 oldPos = obj.transform.position;
         obj.transform.position += Vector3.back;

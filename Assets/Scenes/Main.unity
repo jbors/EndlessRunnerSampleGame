@@ -31214,6 +31214,8 @@ GameObject:
   - component: {fileID: 2094493436}
   - component: {fileID: 2094493438}
   - component: {fileID: 2094493439}
+  - component: {fileID: 2094493441}
+  - component: {fileID: 2094493440}
   m_Layer: 0
   m_Name: PlayerPivot
   m_TagString: Untagged
@@ -31500,7 +31502,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 30956193ca4e94ec3ae015ccbc3e4ae0, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: TrashCat
@@ -31520,8 +31522,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SensorName: ObstacleCensor
-  m_DetectableTags: []
+  m_SensorName: ObstacleSensor1
+  m_DetectableTags:
+  - ObstacleBin
+  - ObstacleRat
+  - ObstacleRoadworksCone
+  - ObstacleWheelyBin
+  - ObstacleRoadworksBarrier
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 12
   m_SphereCastRadius: 0.5
@@ -31554,7 +31561,61 @@ MonoBehaviour:
   m_RayLength: 10
   m_RayLayerMask:
     serializedVersion: 2
-    m_Bits: 4294965704
+    m_Bits: 4294966728
+  m_ObservationStacks: 1
+  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_StartVerticalOffset: 0
+  m_EndVerticalOffset: 0
+--- !u!114 &2094493440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094493431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: ObstacleSensorLow
+  m_DetectableTags:
+  - ObstacleLowBarrier
+  m_RaysPerDirection: 1
+  m_MaxRayDegrees: 0
+  m_SphereCastRadius: 0.5
+  m_RayLength: 10
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294965960
+  m_ObservationStacks: 1
+  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_StartVerticalOffset: 0
+  m_EndVerticalOffset: 0
+--- !u!114 &2094493441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094493431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: ObstacleSensorHigh
+  m_DetectableTags:
+  - ObstacleHighBarrier
+  m_RaysPerDirection: 1
+  m_MaxRayDegrees: 0
+  m_SphereCastRadius: 0.5
+  m_RayLength: 10
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294965960
   m_ObservationStacks: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}

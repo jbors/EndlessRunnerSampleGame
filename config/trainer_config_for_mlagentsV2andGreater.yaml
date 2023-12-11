@@ -16,8 +16,8 @@ behaviors:
     network_settings:
       vis_encode_type: simple
       num_layers: 2
-      normalize: false
-      hidden_units: 64
+      normalize: true
+      hidden_units: 256
       memory:
         sequence_length: 64
         memory_size: 128

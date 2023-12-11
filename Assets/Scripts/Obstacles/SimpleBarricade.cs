@@ -48,6 +48,8 @@ public class SimpleBarricade : Obstacle
 
                 obj.transform.SetParent(segment.objectRoot, true);
 
+                //obj.tag = "Simple";
+
                 //TODO : remove that hack related to #issue7
                 Vector3 oldPos = obj.transform.position;
                 obj.transform.position += Vector3.back;

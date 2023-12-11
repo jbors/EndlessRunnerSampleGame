@@ -47,6 +47,8 @@ public class PatrollingObstacle : Obstacle
         PatrollingObstacle po = obj.GetComponent<PatrollingObstacle>();
         po.m_Segement = segment;
 
+		//obj.tag = "Patrolling";
+
         //TODO : remove that hack related to #issue7
         Vector3 oldPos = obj.transform.position;
         obj.transform.position += Vector3.back;
