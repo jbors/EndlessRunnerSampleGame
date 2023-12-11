@@ -30,15 +30,12 @@ using UnityEngine.Analytics;
 /// </summary>
 ///
 
-// TODO: what do we need to change here so a training run starts automatically??
 public class TrackManager : MonoBehaviour
 {
     static public TrackManager instance { get { return s_Instance; } }
     static protected TrackManager s_Instance;
 
     public GameState gameState;
-
-    //public ConsumableDatabase m_ConsumableDatabase;
 
     static int s_StartHash = Animator.StringToHash("Start");
 
@@ -183,25 +180,13 @@ public class TrackManager : MonoBehaviour
 
     public void Reset()
     {
-        //End();
-        //characterController.End();
-        //gameObject.SetActive(false);
-        //Addressables.ReleaseInstance(characterController.character.gameObject);
-        //characterController.character = null;
-        //Camera.main.transform.SetParent(null);
-        //Camera.main.transform.position = m_CameraOriginalPos;
-
-        //characterController.gameObject.SetActive(false);
-
         End();
         _spawnedSegments = 0;
 
         m_CurrentSegmentDistance = k_StartingSegmentDistance;
         m_TotalWorldDistance = 0.0f;
 
-
         gameState.StartGame();
-
     }
 
     public IEnumerator Begin()
