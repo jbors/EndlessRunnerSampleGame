@@ -375,7 +375,6 @@ public class TrackManager : MonoBehaviour
             // but they aren't part of the game anymore 
             m_PastSegments.Add(m_Segments[0]);
 
-            // DO NOT REMOVE SEGMENTS we'll reuse them
             m_Segments.RemoveAt(0);
 
             _spawnedSegments--;
