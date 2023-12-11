@@ -206,24 +206,14 @@ public class CharacterInputController: Agent
     }
 
     public override void CollectObservations(VectorSensor sensor)
-    {
-        sensor.AddObservation(m_CurrentLane);
-
-        //Are these useful?
-        sensor.AddObservation(m_Sliding);
-        sensor.AddObservation(m_Jumping);
-
-        
+    {        
     }
 
-    //TODO: what else to start training??
+    //Reset environment for a new run
     public override void OnEpisodeBegin()
     {
         Debug.Log("Starting new episode");
         trackManager.Reset();
-
-
-
     }
 
 
@@ -311,9 +301,6 @@ public class CharacterInputController: Agent
             shadowPosition.y = k_ShadowGroundOffset;
             blobShadow.transform.position = shadowPosition;
         }
-
-        //Add tiny reward every iteration we do not die
-        AddReward(0.005f);
 	}
 
     public void Jump()

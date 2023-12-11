@@ -2,9 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
-using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
-using Unity.MLAgents.Actuators;
 
 /// <summary>
 /// Handles everything related to the collider of the character. This is actually an empty game object, NOT on the character prefab
@@ -110,8 +107,6 @@ public class CharacterCollider : MonoBehaviour
     {
         if (c.gameObject.layer == k_CoinsLayerIndex)
 		{
-			//Experiment: no reward just avoid obstacles
-			//controller.AddReward(0.05f);
 			if (magnetCoins.Contains(c.gameObject))
 				magnetCoins.Remove(c.gameObject);
 
@@ -137,7 +132,6 @@ public class CharacterCollider : MonoBehaviour
                 return;
 
 			Debug.Log("Tag:" + c.gameObject.tag);
-            controller.AddReward(-1.0f);
 
             controller.StopMoving();
 
@@ -173,8 +167,6 @@ public class CharacterCollider : MonoBehaviour
             // The collision killed the player, record all data to analytics.
 			else
 			{
-				// Send event back to the Agent for scoring/training
-                //controller.AddReward(-1.0f);
                 controller.EndEpisode();
 
                 m_Audio.PlayOneShot(controller.character.deathSound);
