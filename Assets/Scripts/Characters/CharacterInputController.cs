@@ -212,6 +212,8 @@ public class CharacterInputController: Agent
         //Are these useful?
         sensor.AddObservation(m_Sliding);
         sensor.AddObservation(m_Jumping);
+
+        
     }
 
     //TODO: what else to start training??
@@ -311,7 +313,7 @@ public class CharacterInputController: Agent
         }
 
         //Add tiny reward every iteration we do not die
-        AddReward(0.001f);
+        AddReward(0.005f);
 	}
 
     public void Jump()

@@ -2,7 +2,7 @@ behaviors:
   TrashCat:
     trainer_type: ppo  
     max_steps: 5.0e7
-    time_horizon: 64
+    time_horizon: 1000
     summary_freq: 10000
     hyperparameters:
       batch_size: 128

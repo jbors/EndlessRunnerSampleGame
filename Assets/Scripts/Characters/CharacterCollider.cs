@@ -132,11 +132,12 @@ public class CharacterCollider : MonoBehaviour
         }
         else if(c.gameObject.layer == k_ObstacleLayerIndex)
         {
-            Debug.Log("Tag:" + c.gameObject.tag);
-            controller.AddReward(-1.0f);
 
             if (m_Invincible || controller.IsCheatInvincible())
                 return;
+
+			Debug.Log("Tag:" + c.gameObject.tag);
+            controller.AddReward(-1.0f);
 
             controller.StopMoving();
 
